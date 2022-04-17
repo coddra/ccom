@@ -1,7 +1,8 @@
 #ifndef CCOM_OBJECTS_H
 #define CCOM_OBJECTS_H
-
 #include "mcx/mcx.h"
+#include "mcx/list.h"
+#include "mcx/string.h"
 
 typedef enum {
     LVLMESSAGE,

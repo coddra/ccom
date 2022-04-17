@@ -1,6 +1,7 @@
 #include "../parser.h"
 #include "../diagnostics.h"
 #include "../linker.h"
+#include "../mcx/set.h"
 
 set(char)* whitespace = NULL;
 set(char)* letters = NULL;
@@ -86,7 +87,7 @@ static bool cParseHex(void* context, u64* res, u8 digits) {
                 return false;
             }
     if (res)
-        *res = strtoul(cptrify(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 16);
+        *res = strtoul(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 16);
     return true;
 }
 static bool cParseES(void* context, char* res) {
@@ -100,11 +101,11 @@ static bool cParseES(void* context, char* res) {
     } else if (cParseC(context, 'x') || cParseC(context, 'X')) {
         u64 h = 0;
         if (!cParseHex(context, &h, 2))
-            cAddDgn(context, &EUNRECESCSEQ, cptrify(cCodeFrom(context, o)));
+            cAddDgn(context, &EUNRECESCSEQ, cptr(cCodeFrom(context, o)));
         if (res)
             *res = *(u8*)h;
     } else
-        cAddDgn(context, &EUNRECESCSEQ, cptrify(cCodeFrom(context, o)));
+        cAddDgn(context, &EUNRECESCSEQ, cptr(cCodeFrom(context, o)));
     return true;
 }
 static inline bool cParseCC(void* context, char* res, bool str) {
@@ -121,7 +122,7 @@ static bool cParseIL(void* context, i64* res) {
         return false;
     }
     if (res)
-        *res = strtol(cptrify(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 10);
+        *res = strtol(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 10);
     return true;
 }
 static bool cParseUL(void* context, u64* res) {
@@ -134,7 +135,7 @@ static bool cParseUL(void* context, u64* res) {
             o = ((cContext*)context)->loc;
             if (cParseAllCS(context, octDigits)) {
                 if (res)
-                    *res = strtoul(cptrify(cCodeFrom(context, o)), NULL, 8);
+                    *res = strtoul(cptr(cCodeFrom(context, o)), NULL, 8);
             } else {
                 if (res)
                     *res = 0;
@@ -142,7 +143,7 @@ static bool cParseUL(void* context, u64* res) {
         }
     } else if (cParseAllCS(context, digits)) {
         if (res)
-            *res = strtoul(cptrify(cCodeFrom(context, o)), NULL, 10);
+            *res = strtoul(cptr(cCodeFrom(context, o)), NULL, 10);
     } else if (cParseCL(context, (char*)res));
     else {
         ((cContext*)context)->loc = o;
@@ -158,7 +159,7 @@ static bool cParseDL(void* context, d* res) {
         return false;
     }
     if (res)
-        *res = strtod(cptrify(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL);
+        *res = strtod(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL);
     return true;
 }
 static bool cParseSL(void* context, string* res) {

@@ -1,3 +1,3 @@
 #include "../objects.h"
 
-listDefine(dgn);
+listDefine(cDgn);
