@@ -48,8 +48,9 @@ string cDgnToString(void* context, cDgn dgn, bool standard) {
         }
         if ((dgn.kind->lvl & (LVLWARNING | LVLMESSAGE)) != 0) {
             catCptr(&res, " (-");
+            stringAdd(&res, dgn.kind->lvl & LVLWARNING ? 'w' : 'm' );
             catCptr(&res, dgn.kind->id);
-            catCptr(&res, ")");
+            stringAdd(&res, ')');
         }
     }
     return res;
