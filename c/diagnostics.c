@@ -54,15 +54,15 @@ string cDgnToString(void* context, cDgn dgn, bool standard) {
     }
     return res;
 }
-CLVL cHighestLVL(void* context, bool (*includeDgn)(void* context, cDgn dgn, u highestLvl)) {
+CLVL cHighestLVL(void* context) {
     CLVL res = LVLMESSAGE;
     for (u i = 0; i < ((cContext*)context)->dgns.len && res != LVLERROR; i++)
         if (((cContext*)context)->dgns.items[i].kind->lvl > res && includeDgn(context, ((cContext*)context)->dgns.items[i], LVLERROR + 1))
             res = ((cContext*)context)->dgns.items[i].kind->lvl;
     return res;
 }
-void cPrintDgns(void* context, bool (*includeDgn)(void* context, cDgn dgn, u highestLvl), bool standard) {
-    CLVL h = cHighestLVL(((cContext*)context), includeDgn);
+void cPrintDgns(void* context, bool standard) {
+    CLVL h = cHighestLVL(((cContext*)context));
     for (u i = 0; i < ((cContext*)context)->dgns.len; i++)
         if (includeDgn(context, ((cContext*)context)->dgns.items[i], h))
             puts(cptr(cDgnToString(context, ((cContext*)context)->dgns.items[i], standard)));
