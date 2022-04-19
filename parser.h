@@ -9,7 +9,6 @@ extern set(char)* digits;
 extern set(char)* hexDigits;
 extern set(char)* octDigits;
 extern set(char)* escChars;
-extern set(char)* newLine;
 extern set(char)* stringLiteral;
 extern set(char)* charLiteral;
 extern set(char)* notWhitespace;
