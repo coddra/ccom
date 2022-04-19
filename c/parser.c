@@ -31,7 +31,7 @@ void init(CPARSER) {
     notWhitespace = charSetComplement(whitespace);
 }
 
-bool cCNext(void* context) {
+bool cNext(void* context) {
     if (((cContext*)context)->loc.cr >= ((cContext*)context)->text.len)
         return false;
     if (((cContext*)context)->text.items[((cContext*)context)->loc.cr] == '\n') {
@@ -75,7 +75,7 @@ bool cParseStr(void* context, string s) {
     return false;
 }
 
-static bool cParseHex(void* context, u64* res, u8 digits) {
+bool cParseHex(void* context, u64* res, u8 digits) {
     cLoc o = ((cContext*)context)->loc;
     if (digits == 0){
         if (!cParseAllCS(context, hexDigits))
@@ -90,7 +90,7 @@ static bool cParseHex(void* context, u64* res, u8 digits) {
         *res = strtoul(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 16);
     return true;
 }
-static bool cParseES(void* context, char* res) {
+bool cParseES(void* context, char* res) {
     cLoc o = ((cContext*)context)->loc;
     if (!cParseC(context, '\\'))
         return false;
@@ -108,13 +108,7 @@ static bool cParseES(void* context, char* res) {
         cAddDgn(context, &EUNRECESCSEQ, cptr(cCodeFrom(context, o)));
     return true;
 }
-static inline bool cParseCC(void* context, char* res, bool str) {
-    return cParseES(context, res) || cParseCSR(context, str ? stringLiteral : charLiteral, res);
-}
-static inline bool cParseCL(void* context, char* res) {
-    return cParseC(context, '\'') && cParseCC(context, res, false) && cParseC(context, '\'');
-}
-static bool cParseIL(void* context, i64* res) {
+bool cParseIL(void* context, i64* res) {
     cLoc o = ((cContext*)context)->loc;
     cParseC(context, '-');
     if (!cParseAllCS(context, digits)) {
@@ -125,7 +119,7 @@ static bool cParseIL(void* context, i64* res) {
         *res = strtol(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL, 10);
     return true;
 }
-static bool cParseUL(void* context, u64* res) {
+bool cParseUL(void* context, u64* res) {
     cLoc o = ((cContext*)context)->loc;
     if (cParseC(context, '0')) {
         if (cParseC(context, 'x') || cParseC(context, 'X')) {
@@ -151,7 +145,7 @@ static bool cParseUL(void* context, u64* res) {
     }
     return true;
 }
-static bool cParseDL(void* context, d* res) {
+bool cParseDL(void* context, d* res) {
     cLoc o = ((cContext*)context)->loc;
     cParseC(context, '-');
     if (!cParseAllCS(context, digits) || !cParseC(context, '.') || !cParseAllCS(context, digits)) {
@@ -162,7 +156,7 @@ static bool cParseDL(void* context, d* res) {
         *res = strtod(cptr(stringGetRange(((cContext*)context)->text, o.cr, ((cContext*)context)->loc.cr - o.cr)), NULL);
     return true;
 }
-static bool cParseSL(void* context, string* res) {
+bool cParseSL(void* context, string* res) {
     if (!cParseC(context, '"'))
         return false;
     char r;
