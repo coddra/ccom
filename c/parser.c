@@ -8,7 +8,6 @@ set(char)* letters = NULL;
 set(char)* digits = NULL;
 set(char)* hexDigits = NULL;
 set(char)* octDigits = NULL;
-set(char)* specialChars = NULL;
 set(char)* escChars = NULL;
 set(char)* newLine = NULL;
 set(char)* stringLiteral = NULL;
@@ -23,7 +22,6 @@ void init(CPARSER) {
     digits = charRangeNew('0', '9');
     hexDigits = charSetAdd(charSetAdd(charRangeNew('0', '9'), charRangeNew('a', 'f')), charRangeNew('A', 'F'));
     octDigits = charRangeNew('0', '7');
-    specialChars = charAggregateFromArray("_<>", 3);
     escChars = charAggregateFromArray("abfnrtv\'\"\\?", 11);
     newLine = charAggregateFromVaList(1, '\n');//preprocessor will normalize line endings
     stringLiteral = charSetComplement(charAggregateFromArray("\n\\\"", 3));

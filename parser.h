@@ -8,7 +8,6 @@ extern set(char)* letters;
 extern set(char)* digits;
 extern set(char)* hexDigits;
 extern set(char)* octDigits;
-extern set(char)* specialChars;
 extern set(char)* escChars;
 extern set(char)* newLine;
 extern set(char)* stringLiteral;
