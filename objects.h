@@ -20,7 +20,7 @@ typedef struct cLoc_s {
 typedef struct cDgnDscr_s {
     char* id;
     char* msg;
-    CLVL lvl;
+    CLVL  lvl;
 } cDgnDscr;//diagnostic descriptor
 typedef struct cDgn_s {
     cDgnDscr* kind;
@@ -28,11 +28,17 @@ typedef struct cDgn_s {
     char*     prm;
 } cDgn;//diagnostic
 
+typedef struct cFile_s {
+    string  name;
+    list(u) uses;
+} cFile;
+
 listDeclare(cDgn);
+listDeclare(cFile);
 #define CCONTEXTFIELDS                     \
     string       text;                     \
     list(cDgn)   dgns;                     \
-    list(string) inputs;                   \
+    list(cFile)  inputs;                   \
     cLoc         loc
 typedef struct cContext_s {
     CCONTEXTFIELDS;

@@ -21,7 +21,7 @@ string cDgnToString(void* context, cDgn dgn, bool standard) {
     string res = {0};
     if (standard) {
         if (dgn.loc.file < ((cContext*)context)->inputs.len) {
-            stringAddRange(&res, ((cContext*)context)->inputs.items[dgn.loc.file]);
+            stringAddRange(&res, ((cContext*)context)->inputs.items[dgn.loc.file].name);
             stringAdd(&res, ':');
             concat(&res, utos(dgn.loc.ln));
             stringAdd(&res, ':');
@@ -40,7 +40,7 @@ string cDgnToString(void* context, cDgn dgn, bool standard) {
         catCptr(&res, "\n");
         if (dgn.loc.file < ((cContext*)context)->inputs.len) {
             catCptr(&res, "\tin file '");
-            stringAddRange(&res, ((cContext*)context)->inputs.items[dgn.loc.file]);
+            stringAddRange(&res, ((cContext*)context)->inputs.items[dgn.loc.file].name);
             catCptr(&res, "', at line: ");
             concat(&res, utos(dgn.loc.ln));
             catCptr(&res, ", column: ");
